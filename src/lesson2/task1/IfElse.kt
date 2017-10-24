@@ -2,6 +2,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import java.lang.Math.*
+
 
 /**
  * Пример
@@ -34,10 +36,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    if (((age % 10 > 4) && (age % 10 < 10)) || (age % 10 == 0) || ((age > 10) && (age < 21))) return "$age лет"
-    if ((age % 10 == 1) && (age != 11)) return "$age год"
-    if ((age % 10 > 1) && (age % 10 < 5) && (age != 12) && (age != 13) && (age != 14)) return "$age года"
-    else return "Неверный формат числа"
+    val d = age % 10
+    val a = age % 100
+    return if (a in 11..19) "$age лет" else
+        return when (d) {
+            1 -> "$age год"
+            2 -> "$age года"
+            3 -> "$age года"
+            4 -> "$age года"
+            else -> "$age лет"
+        }
 }
 
 /**
@@ -54,10 +62,11 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s2: Double = t2 * v2
     val s3: Double = t3 * v3
     val halfS: Double = (s1 + s2 + s3) / 2.0
-    return if (s1 >= halfS) halfS / v1
-    else
-        if (s1 + s2 >= halfS) t1 + (halfS - s1) / v2
-        else t1 + t2 + (halfS - s1 - s2) / v3
+    return when {
+        s1 >= halfS -> halfS / v1
+        s1 + s2 >= halfS -> t1 + (halfS - s1) / v2
+        else -> t1 + t2 + (halfS - s1 - s2) / v3
+    }
     }
 /**
  * Простая
@@ -70,12 +79,14 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int {
-    if ((kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2)) return 3
-    if (kingX == rookX1 || kingY == rookY1) return 1
-    if (kingX == rookX2 || kingY == rookY2) return 2
-    else return 0
-}
+                       rookX2: Int, rookY2: Int): Int = when {
+                           (kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2) -> 3
+                           kingX == rookX1 || kingY == rookY1 -> 1
+                           kingX == rookX2 || kingY == rookY2 -> 2
+                           else -> {
+                               0
+                           }
+                       }
 
 /**
  * Простая
@@ -109,14 +120,15 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val theLongestSide = Math.max(Math.max(a, b), c)
-    val theShortestSide = Math.min(Math.min(a, b), c)
+    fun sqr(x: Double) = x * x
+    val theLongestSide = maxOf(maxOf(a, b), c)
+    val theShortestSide = minOf(minOf(a, b), c)
     val theMiddleSide = a + b + c - theLongestSide - theShortestSide
     return when {
         theLongestSide > theShortestSide + theMiddleSide -> -1
-        Math.sqrt(theLongestSide) > Math.sqrt(theMiddleSide) + Math.sqrt(theShortestSide) -> 2
-        Math.sqrt(theLongestSide) == Math.sqrt(theMiddleSide) + Math.sqrt(theShortestSide) -> 1
-        Math.sqrt(theLongestSide) < Math.sqrt(theMiddleSide) + Math.sqrt(theShortestSide) -> 0
+        sqr(theLongestSide) > sqr(theMiddleSide) + sqr(theShortestSide) -> 2
+        sqr(theLongestSide) == sqr(theMiddleSide) + sqr(theShortestSide) -> 1
+        sqr(theLongestSide) < sqr(theMiddleSide) + sqr(theShortestSide) -> 0
         else -> -1
     }
 }
@@ -132,7 +144,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return if (a > d || c > b) -1
     else if (c == b || a == d) 0
-    else if (c < b && c >= a) {
+    else if (c in a..(b - 1)) {
         if (d > b) b - c
         else d - c
     } else if (c < a) {

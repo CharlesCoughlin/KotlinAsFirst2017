@@ -124,7 +124,7 @@ fun abs(v: List<Double>): Double {
 fun mean(list: List<Double>): Double {
     var s = 0.0
     return when {
-        list.isEmpty() -> s
+        list.isEmpty() ->  s
         else -> {
             for (element in list) {
                 s += element

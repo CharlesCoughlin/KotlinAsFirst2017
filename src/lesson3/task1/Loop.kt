@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 import lesson1.task1.sqr
+import java.lang.Math.*
 
 /**
  * Пример
@@ -145,22 +146,19 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var count = 0
-    if (n > m)
-        for (i in 2..n) {
-            when {
-                (n % i == 0) && (m % i == 0) -> count++
-            }
+fun gcd(a: Int, b: Int): Int {
+    var newA = a
+    var newB = b
+    while (max(newA, newB) % min(newA, newB) != 0) {
+        when {
+            newA > newB -> newA %= newB
+            else -> newB %= newA
         }
-    else
-        for (i in 2..m) {
-            when {
-                (n % i == 0) && (m % i == 0) -> count++
-            }
-        }
-    return count <= 0
+    }
+    return min(newA, newB)
 }
+
+fun isCoPrime(m: Int, n: Int): Boolean = gcd(m,n) == 1
 
 /**
  * Простая

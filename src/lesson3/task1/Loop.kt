@@ -129,9 +129,9 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var max = 0
-    for (i in (n - 1)..1) {
-        if ((n % i) == 0) {
+    var max = 1
+    for(i in n-1 downTo 1) {
+        if(n % i == 0) {
             max = i
             break
         }
@@ -181,14 +181,16 @@ fun squareBetweenExists(m: Int , n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var sin = x % (2 * Math.PI)
-    var sinx = sin
-    var count = 1
-    val sin2 = sin
-    while (Math.abs(sinx) >= eps) {
-        sinx = (-sinx * sin2) / (((count * 2 + 1) * (count * 2)).toDouble() * sin2)
-        count += 1
-        sin += sinx
+    var count = 2
+    var sin = 0.0
+    val a = x % (PI * 2)
+    var b = a
+    var c = -1
+    while (abs(b) >= eps) {
+        sin +=  -c * b
+        b *= sqr(a) / (count * (count + 1))
+        count += 2
+        c *= -1
     }
     return sin
 }
@@ -201,16 +203,18 @@ fun sin(x: Double, eps: Double): Double {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double {
-    var count = 1
-    var s = 1.0
-    var cos = 1.0
-    val const = x % (2 * Math.PI)
-    while (Math.abs(s) >= eps) {
-        s = (s * const) / (((count * 2 - 1) * (count * 2)).toDouble() * const * (-1))
-        count += 1
-        cos += s
+    var cos = 0.0
+    var count = 2
+    val a = x % (2 * PI)
+    var b = 1.0
+    var c = 1
+    while (abs(b) >= eps) {
+        cos += c * b
+        b *= sqr(a) / (count * (count - 1))
+        c *= -1
+        count += 2
     }
-    return  cos
+    return cos
 }
 
 /**

@@ -341,7 +341,7 @@ fun roman(n: Int): String {
  */
 fun russian(n: Int): String = TODO()
 
-/**     val listHundred = listOf("сто", "двести", "триста",
+/** exit    val listHundred = listOf("сто", "двести", "триста",
             "четыреста", "пятьсот", "шестьсот",
             "семьсот", "восемьсот", "девятьсот")
     val listDecades = listOf("двадцать",

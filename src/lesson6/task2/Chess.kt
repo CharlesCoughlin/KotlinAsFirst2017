@@ -1,5 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson6.task2
+import java.lang.Math.abs
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -21,7 +22,10 @@ data class Square(val column: Int, val row: Int) {
      * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
      * Для клетки не в пределах доски вернуть пустую строку
      */
-    fun notation(): String = TODO()
+    fun notation(): String = when {
+        !inside() -> ""
+        else -> (column + 96).toChar() + "$row"
+    }
 }
 
 /**
@@ -31,7 +35,10 @@ data class Square(val column: Int, val row: Int) {
  * В нотации, колонки обозначаются латинскими буквами от a до h, а ряды -- цифрами от 1 до 8.
  * Если нотация некорректна, бросить IllegalArgumentException
  */
-fun square(notation: String): Square = TODO()
+fun square(notation: String): Square = when {
+    !notation.matches(Regex("""([a-h][1-8])""")) -> throw IllegalArgumentException()
+    else -> Square((notation[0].toInt() - 96), (notation[1] - 48).toInt())
+}
 
 /**
  * Простая
@@ -73,7 +80,6 @@ fun rookMoveNumber(start: Square, end: Square): Int = TODO()
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
-
 /**
  * Простая
  *
@@ -139,7 +145,17 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Пример: kingMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
-fun kingMoveNumber(start: Square, end: Square): Int = TODO()
+fun kingMoveNumber(start: Square, end: Square): Int {
+    val distanceColumn = abs(start.column - end.column)
+    val distanceRow = abs(start.row - end.row)
+    return when {
+        !start.inside() || !end.inside() -> throw IllegalArgumentException()
+        else -> when {
+            distanceColumn < distanceRow -> distanceRow
+            else -> distanceColumn
+        }
+    }
+}
 
 /**
  * Сложная

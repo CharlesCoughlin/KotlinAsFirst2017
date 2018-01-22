@@ -83,7 +83,7 @@ data class Circle(val center: Point, val radius: Double) {
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = radius >= center.distance(p)
 }
 
 /**
@@ -184,14 +184,21 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = when {
+    a.x == b.x -> Line(a, Math.PI * 0.5)
+    a.y == b.y -> Line(a, 0.0)
+    (b.y - a.y > 0) xor (b.x - a.x > 0) -> {
+        Line(a,Math.PI - Math.atan(Math.abs(b.y - a.y) / Math.abs(b.x - a.x)))
+    }
+    else -> Line(a, Math.atan((b.y - a.y) / (b.x - a.x)))
+}
 
 /**
  * Сложная
